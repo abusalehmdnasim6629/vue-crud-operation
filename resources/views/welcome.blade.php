@@ -226,15 +226,16 @@
                     searchMember: function searchMember(){
                         var _this = this;
                         var name = _this.search;
-                        axios.get('/searchMember/'+name).then(function(response){
-                           
+                        if(name != ''){
+                        axios.get('/searchMember/'+name).then(function(response){  
                             _this.items = response.data;
-                            console.log(_this.items);
-                            // _this.getMember();
                         })
                         .catch(function (error){
                             this.getMember();
                         })
+                        }else{
+                            this.getMember();
+                        }
                     },
                     setVal: function setVal(val_id, val_name,val_age,val_profession)
                     {
