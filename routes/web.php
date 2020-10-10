@@ -19,5 +19,6 @@ Route::get('/', function () {
 
 Route::post('/store','MemberController@index');
 Route::get('/getMember','MemberController@getMember');
+Route::get('/searchMember/{name}','MemberController@searchMember');
 Route::post('/deleteItem/{id}','MemberController@deleteItem');
 Route::post('/editItem/{id}','MemberController@editItem');

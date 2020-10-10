@@ -68,7 +68,7 @@
             vertical-align: middle;
             }
             .modal-container {
-            width: 500px;
+            width: 40%;
             margin: 0px auto;
             padding: 20px 30px;
             background-color: #fff;
@@ -84,6 +84,14 @@
             .modal-body {
             margin: 20px 0;
             }
+            .tr{
+            background: #2b30d1;
+            color: #fff;
+            }
+            button{
+                padding:10px;
+                margin-bottom:20px;
+            }
         </style>
         
     </head>
@@ -91,7 +99,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mx-auto">
-                        
+                        <h3 class="text-center">Add Member</h3>
                         <div id="app">
                             <form action="">
                                 <div class="form-group">
@@ -109,32 +117,37 @@
                                     <input type="text" name="profession" id="profession" class="form-control" required placeholder="Enter your profession" v-model="newItem.profession">
                                 </div>
                                 <div class="form-group">
-                                   <button class="btn btn-success" @click.prevent="createItem()">Add</button>
+                                   <button class="btn btn-success float-right" @click.prevent="createItem()">Add</button>
                                 </div>
+                               
+                                <div class="clearfix"></div>
                                 <div class="text-center alert alert-danger" v-bind:class="{'d-none': hasError}">please fill all inputs</div>
+                                <div class="text-center alert alert-success" v-bind:class="{'d-none': hasDelete}">Deleted successfully</div>
                                 
                              
                             </form>
-
+                            <div class="form-group">
+                                <input type="text" class="form-control" v-model="search" placeholder="Please search by name" @input="searchMember">
+                            </div>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Age</th>
-                                            <th>Profession</th>
-                                            <th>Action</th>
+                                        <tr class="tr">
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Age</th>
+                                            <th class="text-center">Profession</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="item in items">
-                                            <td>@{{item.name}}</td>
-                                            <td>@{{item.age}}</td>
-                                            <td>@{{item.profession}}</td>
-                                            <td>
+                                            <td class="text-center">@{{item.name}}</td>
+                                            <td class="text-center">@{{item.age}}</td>
+                                            <td class="text-center">@{{item.profession}}</td>
+                                            <td class="text-center">
                                                 <div class="btn-group">
-                                                    <a  id="show-modal" class="btn btn-info" @click="showModal = true; setVal(item.id, item.name, item.age, item.profession)">edit</a>
-                                                    <a href="" class="btn btn-danger" @click.prevent="deleteItem(item)">delete</a>
+                                                    <a  id="show-modal" class="btn btn-primary btn-sm" @click="showModal = true; setVal(item.id, item.name, item.age, item.profession)">edit</a>
+                                                    <a href="" class="btn btn-danger btn-sm" @click.prevent="deleteItem(item)">delete</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -188,23 +201,40 @@
                 data: {
                     newItem: {'name':'','age':'','profession':''},
                     hasError: true,
+                    hasDelete: true,
                     showModal: false,
                     items: [],
+                    searchItem: [],
                     e_id: '',
                     e_name: '',
                     e_age: '',
-                    e_profession: ''
+                    e_profession: '',
+                    search: ''
                 },
                 mounted: function mounted(){
                     this.getMember();
                 },
                 methods:{
+                    
                     getMember: function getMember(){
                         var _this = this;
                         axios.get('/getMember').then(function(response){
                             _this.items = response.data;
                             
                         });
+                    },
+                    searchMember: function searchMember(){
+                        var _this = this;
+                        var name = _this.search;
+                        axios.get('/searchMember/'+name).then(function(response){
+                           
+                            _this.items = response.data;
+                            console.log(_this.items);
+                            // _this.getMember();
+                        })
+                        .catch(function (error){
+                            this.getMember();
+                        })
                     },
                     setVal: function setVal(val_id, val_name,val_age,val_profession)
                     {
@@ -220,10 +250,12 @@
                         if(input['name'] == '' || input['age'] == '' || input['profession'] == '')
                         {
                             this.hasError = false;
+                            this.hasDelete = true;
                             
                         }
                         else{
                             this.hasError = true;
+                            this.hasDelete = true;
                             axios.post('/store',input).then(function(response){
                                 _this.newItem = {'name':'','age':'','profession':''}
                                 _this.getMember();
@@ -249,6 +281,8 @@
                         var _this = this;
                         axios.post('/deleteItem/'+item.id).then(function(response){
                            _this.getMember();
+                           _this.hasDelete = false;
+                           _this.hasError = true;
                             
                         });
                     }

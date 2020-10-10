@@ -12,13 +12,17 @@ class MemberController extends Controller
         $member->name = $request->name;
         $member->age = $request->age;
         $member->profession = $request->profession;
-
         $member->save();
         return $member;
     }
 
     public function getMember(){
         $data = Member::all();
+        return $data;
+    }
+
+    public function searchMember($name){
+        $data = Member::where('name', 'LIKE', '%'.$name.'%')->get();
         return $data;
     }
 
