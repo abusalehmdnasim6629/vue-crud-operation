@@ -10,6 +10,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
@@ -121,8 +122,9 @@
                                 </div>
                                
                                 <div class="clearfix"></div>
-                                <div class="text-center alert alert-danger" v-bind:class="{'d-none': hasError}">please fill all inputs</div>
-                                <div class="text-center alert alert-success" v-bind:class="{'d-none': hasDelete}">Deleted successfully</div>
+                                <div class="alert alert-danger" v-bind:class="{'d-none': hasError}">please fill all inputs<i class="fas fa-window-close float-right" @click="hasError = true"></i></div>
+                                <div class="alert alert-success" v-bind:class="{'d-none': hasDelete}">Deleted successfully<i class="fas fa-window-close float-right" @click="hasDelete = true"></i></div>
+                                <!-- <div class="text-center alert alert-success" v-bind:class="{'d-none': hasDelete}"></div> -->
                                 
                              
                             </form>
@@ -154,6 +156,8 @@
                                     </tbody>
                                 </table>
 
+                                
+
                                 <modal v-if="showModal" @close="showModal=false">
                                     <h3 slot="header">Edit Member</h3>
                                     <div slot="body">
@@ -179,6 +183,9 @@
                                     </button>
                                     </div>
                                 </modal>
+
+
+                                
                             </div>
                         </div>
                         
@@ -291,36 +298,37 @@
                 });
         </script>
 
-    <script type="text/x-template" id="modal-template">
-      <transition name="modal">
-        <div class="modal-mask">
-          <div class="modal-wrapper">
-            <div class="modal-container">
+            <script type="text/x-template" id="modal-template">
+            <transition name="modal">
+                <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
 
-              <div class="modal-header">
-                <slot name="header">
-                  default header
-                </slot>
-              </div>
+                    <div class="modal-header">
+                        <slot name="header">
+                        default header
+                        </slot>
+                    </div>
 
-              <div class="modal-body">
-                <slot name="body">
-                  default body
-                </slot>
-              </div>
+                    <div class="modal-body">
+                        <slot name="body">
+                        default body
+                        </slot>
+                    </div>
 
-              <div class="modal-footer">
-                <slot name="footer">
-                  default footer
-                  <button class="modal-default-button" @click="$emit('close')">
-                    OK
-                  </button>
-                </slot>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </script>
+                    <div class="modal-footer">
+                        <slot name="footer">
+                        default footer
+                        <button class="modal-default-button" @click="$emit('close')">
+                            OK
+                        </button>
+                        </slot>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </transition>
+
+            </script>
     </body>
 </html>
