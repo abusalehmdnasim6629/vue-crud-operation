@@ -93,6 +93,26 @@
                 padding:10px;
                 margin-bottom:20px;
             }
+            .head{
+                position:relative;
+            }
+            .head button{
+                position:absolute;
+                top:0;
+                left:87%;
+            }
+            .head .mc{
+                position:absolute;
+                top:0;
+                left:316%;
+            }
+            .head .mc{
+               cursor:pointer
+            }
+            .form-group{
+                padding:2px;
+            }
+
         </style>
         
     </head>
@@ -100,37 +120,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mx-auto">
-                        <h3 class="text-center">Add Member</h3>
+                            
                         <div id="app">
-                            <form action="">
-                                <div class="form-group">
-                                    <label for="name">Name:</label>
-                                    <input type="text"name="name" id="name" class="form-control" required placeholder="Enter your name" v-model="newItem.name">
+                                <div class="head">
+                                    <h3 class="text-center">Members</h3>
+                                   <button class="btn btn-info float-right" id="add-modal" @click="addModal = true"><i class="fas fa-plus"></i> Add</button>
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="name">Age:</label>
-                                    <input type="number" name="age" id="age" class="form-control" required placeholder="Enter your age" v-model="newItem.age">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="name">Profession:</label>
-                                    <input type="text" name="profession" id="profession" class="form-control" required placeholder="Enter your profession" v-model="newItem.profession">
-                                </div>
-                                <div class="form-group">
-                                   <button class="btn btn-success float-right" @click.prevent="createItem()">Add</button>
-                                </div>
-                               
                                 <div class="clearfix"></div>
                                 <div class="alert alert-danger" v-bind:class="{'d-none': hasError}">please fill all inputs<i class="fas fa-window-close float-right" @click="hasError = true"></i></div>
                                 <div class="alert alert-success" v-bind:class="{'d-none': hasDelete}">Deleted successfully<i class="fas fa-window-close float-right" @click="hasDelete = true"></i></div>
                                 <!-- <div class="text-center alert alert-success" v-bind:class="{'d-none': hasDelete}"></div> -->
-                                
-                             
-                            </form>
                             <div class="form-group">
-                                <input type="text" class="form-control" v-model="search" placeholder="Please search by name" @input="searchMember">
+                                <input type="text" class="form-control" v-model="search" placeholder="Search by name only" @input="searchMember">
                             </div>
+                            
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -159,18 +162,23 @@
                                 
 
                                 <modal v-if="showModal" @close="showModal=false">
-                                    <h3 slot="header">Edit Member</h3>
+                                <h3 slot="header" class="head">Edit Member<i class="mc fas fa-window-close float-right" @click="showModal = false"></i></h3>
                                     <div slot="body">
+                                        <input type="hidden" disabled class="form-control" id="e_id" name="id" required  :value="this.e_id">
+                                        <div class="form-group">
+                                            <label for="name">Name:</label>
+                                            <input type="text" class="form-control" id="e_name" name="name" required  :value="this.e_name">
+                                        </div>
                                         
-                                        <input type="hidden" disabled class="form-control" id="e_id" name="id"
-                                                required  :value="this.e_id">
-                                        Name: <input type="text" class="form-control" id="e_name" name="name"
-                                                required  :value="this.e_name">
-                                        Age: <input type="number" class="form-control" id="e_age" name="age"
-                                        required  :value="this.e_age">
-                                        Profession: <input type="text" class="form-control" id="e_profession" name="profession"
-                                        required  :value="this.e_profession">
-                                        
+                                        <div class="form-group">
+                                            <label for="name">Age:</label>
+                                            <input type="number" name="age" id="age" class="form-control" required placeholder="Enter your age" v-model="newItem.age">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">Profession:</label>
+                                            <input type="text" name="profession" id="profession" class="form-control" required placeholder="Enter your profession" v-model="newItem.profession">
+                                        </div>
+                                       
                                     
                                     </div>
                                     <div slot="footer">
@@ -181,6 +189,50 @@
                                     <button class="btn btn-info" @click.prevent="editItem()">
                                         Update
                                     </button>
+                                    </div>
+                                </modal>
+
+                                <modal v-if="addModal" @close="addModal = false">
+                                    
+                                    <h3 slot="header" class="head">Add Member<i class="mc fas fa-window-close float-right" @click="addModal = false"></i></h3>
+                                    
+                                    
+                                    <div slot="body">
+                                        
+                                    <div class="alert alert-danger" v-bind:class="{'d-none': hasError}">please fill all inputs<i class="fas fa-window-close float-right" @click="hasError = true"></i></div>
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text"name="name" id="name" v-validate="'required'" required class="form-control" placeholder="Enter your name" v-model="newItem.name">
+                                        <div v-show="errors.has('name')" class="alert alert-danger">
+                                           @{{ errors.first('name')}}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Age:</label>
+                                        <input type="number" name="age" id="age" class="form-control" required v-validate="'required|max:2|min:1'"  placeholder="Enter your age" v-model="newItem.age">
+                                        <div v-show="errors.has('age')" class="alert alert-danger">
+                                           @{{ errors.first('age')}}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Profession:</label>
+                                        <input type="text" name="profession" v-validate="'required'" required id="profession" class="form-control"  placeholder="Enter your profession" v-model="newItem.profession">
+                                        <div v-show="errors.has('profession')" class="alert alert-danger">
+                                           @{{ errors.first('profession')}}
+                                        </div>
+                                    </div>
+                                    
+                                    </div>
+                                    <div slot="footer">
+                                        <button class="btn btn-default" @click="addModal = false" >
+                                        Cancel
+                                    </button>
+                                    
+                                    
+                                        <button class="btn btn-success float-right" @click.prevent="createItem()">Add</button>
+                                    
                                     </div>
                                 </modal>
 
@@ -196,10 +248,13 @@
            
         </div>
 
-
+        
 <script src="https://cdn.jsdelivr.net/npm/vue-js-modal@2.0.0-rc.6/dist/index.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vee-validate@<3.0.0/dist/vee-validate.js"></script>
+
         <script>
-          
+            Vue.use(VeeValidate);
             Vue.component('modal',{
                 template: '#modal-template'
             })
@@ -210,6 +265,7 @@
                     hasError: true,
                     hasDelete: true,
                     showModal: false,
+                    addModal: false,
                     items: [],
                     searchItem: [],
                     e_id: '',
@@ -259,14 +315,18 @@
                         {
                             this.hasError = false;
                             this.hasDelete = true;
+                           
                             
                         }
                         else{
                             this.hasError = true;
                             this.hasDelete = true;
+                            this.addModal = false;
                             axios.post('/store',input).then(function(response){
                                 _this.newItem = {'name':'','age':'','profession':''}
+                                
                                 _this.getMember();
+                               
                             });
                         }
                        
