@@ -117,6 +117,7 @@
         
     </head>
     <body>
+       
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mx-auto">
@@ -146,13 +147,13 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="item in items">
-                                            <td class="text-center">@{{item.name}}</td>
+                                            <td class="text-center" >@{{item.name}}</td>
                                             <td class="text-center">@{{item.age}}</td>
                                             <td class="text-center">@{{item.profession}}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
-                                                    <a  id="show-modal" class="btn btn-primary btn-sm" @click="showModal = true; setVal(item.id, item.name, item.age, item.profession)">edit</a>
-                                                    <a href="" class="btn btn-danger btn-sm" @click.prevent="deleteItem(item)">delete</a>
+                                                    <a  id="show-modal" class="btn btn-primary btn-sm" @click="showModal = true; setVal(item.id, item.name, item.age, item.profession)"><i class="fas fa-edit"></i></a>
+                                                    <a href="" class="btn btn-danger btn-sm" @click.prevent="deleteItem(item)"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -172,11 +173,11 @@
                                         
                                         <div class="form-group">
                                             <label for="name">Age:</label>
-                                            <input type="number" name="age" id="age" class="form-control" required placeholder="Enter your age" v-model="newItem.age">
+                                            <input type="number" name="age" id="e_age" class="form-control" required :value="this.e_age">
                                         </div>
                                         <div class="form-group">
                                             <label for="name">Profession:</label>
-                                            <input type="text" name="profession" id="profession" class="form-control" required placeholder="Enter your profession" v-model="newItem.profession">
+                                            <input type="text" name="profession" id="e_profession" class="form-control" required :value="this.e_profession">
                                         </div>
                                        
                                     
@@ -258,6 +259,7 @@
             Vue.component('modal',{
                 template: '#modal-template'
             })
+      
             var app = new Vue({
                 el: '#app',
                 data: {

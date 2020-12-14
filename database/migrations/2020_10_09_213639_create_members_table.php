@@ -17,7 +17,10 @@ class CreateMembersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('age');
-            $table->string('profession');
+            $table->date('birth');
+            $table->string('rankingOfTest');
+            $table->string('rankingOfODI');
+            $table->string('rankingOfT20');
             $table->timestamps();
         });
     }
